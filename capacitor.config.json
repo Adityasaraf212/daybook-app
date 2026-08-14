@@ -1,0 +1,13 @@
+{
+  "appId": "com.aditya.daybook",
+  "appName": "Daybook",
+  "webDir": "www",
+  "bundledWebRuntime": false,
+  "backgroundColor": "#F2F2F7",
+  "plugins": {
+    "LocalNotifications": {
+      "smallIcon": "ic_stat_daybook",
+      "iconColor": "#FF9500"
+    }
+  }
+}

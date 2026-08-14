@@ -1,0 +1,17 @@
+{
+  "name": "daybook-android",
+  "version": "1.0.0",
+  "description": "Daybook - personal task, purchase, and location tracker, packaged for Android",
+  "scripts": {
+    "add-android": "npx cap add android",
+    "sync": "npx cap sync android",
+    "open": "npx cap open android"
+  },
+  "license": "ISC",
+  "dependencies": {
+    "@capacitor/android": "^8.5.0",
+    "@capacitor/cli": "^8.5.0",
+    "@capacitor/core": "^8.5.0",
+    "@capacitor/local-notifications": "^8.2.1"
+  }
+}
