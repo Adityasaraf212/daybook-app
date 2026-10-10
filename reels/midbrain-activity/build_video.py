@@ -30,7 +30,7 @@ CROP_H = 730                   # keep source rows 0..729 (burned-in captions sta
 VID_H = 1649                   # 1080 * 730 / 478, rounded down so the crop box stays inside the source
 SHIFT = 60                     # footage is nudged up this many px (top rows are under the app UI anyway)
 VIS_H = VID_H - SHIFT          # visible footage height before the dark base
-TOTAL = 33.0
+TOTAL = 34.0
 T_REACT = 23.0                 # reaction block starts
 T_CTA = 28.0                   # CTA end card starts
 
@@ -62,8 +62,10 @@ COPY = dict(
     cta_brand="MID-BRAIN ACTIVITY",
     cta_1=["WANT", "YOUR", "CHILD"],
     cta_2=["TO", "TRY", "THIS?"],
-    cta_button="DM US “MIDBRAIN”",
-    cta_foot="Follow for more brain activities",
+    cta_school=("THE MAPLE", "INTERNATIONAL SCHOOL"),
+    cta_place="BHADRA",
+    cta_contact="CONTACT NOW",
+    cta_phone="8440076300",
 )
 
 # Shot list: name, out_start, out_end, src_start, speed, push (end zoom - 1), cx, cy[, base_zoom]
@@ -93,7 +95,7 @@ SHOTS = [
     ("HUG",    24.5, 26.5, 112.00, 0.80, 0.08, 239, 365),
     ("LAUGH2", 26.5, 28.0, 118.50, 1.00, 0.08, 239, 365),
     # CTA background (slow-mo, under a dark scrim)
-    ("CTA",    28.0, 33.0, 119.90, 0.50, 0.06, 239, 365),
+    ("CTA",    28.0, 34.0, 119.90, 0.40, 0.06, 239, 365),
 ]
 
 # beats used for white flashes (big transitions)
@@ -408,7 +410,7 @@ def build_overlays():
     ov.append((T_REACT, T_CTA, kinetic_lines(C["react"], 128, 440, T_REACT + 0.1, 0.16, colors={"SMILES": YELLOW, "ALL": YELLOW},
                                          line_gap=1.1, max_w=940)))
 
-    # -- CTA ----------------------------------------------------------------
+    # -- CTA / end card ----------------------------------------------------------
     brand = text_rgba(C["cta_brand"], 46, WHITE, 0, BLACK, shadow=False)
     brain = emoji_rgba("\U0001F9E0", 62)
 
@@ -418,31 +420,41 @@ def build_overlays():
             return
         tw = ink_w(brand)
         x0 = W / 2 - (brain.width + 16 + tw) / 2
-        blit(img, brain, x0 + brain.width / 2, 500, scale=s, alpha=a)
-        blit(img, brand, x0 + brain.width + 16 + tw / 2, 504, scale=s, alpha=a)
+        blit(img, brain, x0 + brain.width / 2, 430, scale=s, alpha=a)
+        blit(img, brand, x0 + brain.width + 16 + tw / 2, 434, scale=s, alpha=a)
     ov.append((T_CTA, TOTAL, cta_brand))
-    ov.append((T_CTA, TOTAL, kinetic_lines([C["cta_1"], C["cta_2"]], 124, 720, T_CTA + 0.55, 0.16,
+    ov.append((T_CTA, TOTAL, kinetic_lines([C["cta_1"], C["cta_2"]], 118, 600, T_CTA + 0.55, 0.16,
                                           colors={"THIS?": YELLOW}, line_gap=1.1, max_w=940)))
 
-    btn_txt = text_rgba(C["cta_button"], 62, INK, 0, BLACK, shadow=False)
-    btn_em = emoji_rgba("\U0001F447", 70)
-    bw = ink_w(btn_txt) + 28 + btn_em.width + 90
-    bh = 150
-    btn = pill_rgba(bw, bh, 75, YELLOW + (255,)).copy()
-    btn.alpha_composite(btn_txt, (45 - btn_txt.info["pad"], (bh - btn_txt.height) // 2 + 2))
-    btn.alpha_composite(btn_em, (bw - 45 - btn_em.width, (bh - btn_em.height) // 2 + 4))
-    foot = text_rgba(C["cta_foot"], 44, (235, 235, 235), 0, BLACK, shadow=False)
+    def divider(img, tl, total):
+        u = ease_out_cubic((tl - (T_CTA + 1.35)) / 0.3)
+        if u > 0:
+            w = int(220 * u)
+            ImageDraw.Draw(img).rounded_rectangle([W // 2 - w // 2, 756, W // 2 + w // 2, 764], 4, fill=YELLOW)
+    ov.append((T_CTA, TOTAL, divider))
 
-    def cta_btn(img, tl, total):
-        s, a = pop(tl - (T_CTA + 1.7), 0.34)
+    sch1, sch2 = C["cta_school"]
+    ov.append((T_CTA, TOTAL, kinetic_lines([sch1.split()], 94, 855, T_CTA + 1.5, 0.12, stroke=9, max_w=940)))
+    ov.append((T_CTA, TOTAL, kinetic_lines([sch2.split()], 62, 955, T_CTA + 1.75, 0.12, stroke=7, max_w=940)))
+    ov.append((T_CTA, TOTAL, kinetic_lines([[("emoji", "\U0001F4CD"), C["cta_place"]]], 58, 1038, T_CTA + 2.1, 0.12,
+                                          colors={C["cta_place"]: YELLOW}, stroke=7, max_w=940)))
+    ov.append((T_CTA, TOTAL, kinetic_lines([C["cta_contact"].split()], 46, 1140, T_CTA + 2.5, 0.1, stroke=6, max_w=940)))
+
+    ph_txt = text_rgba(C["cta_phone"], 88, INK, 0, BLACK, shadow=False)
+    ph_em = emoji_rgba("\U0001F4DE", 84)
+    pw = ink_w(ph_txt) + 22 + ph_em.width + 100
+    ph = 150
+    phone = pill_rgba(pw, ph, 75, YELLOW + (255,)).copy()
+    phone.alpha_composite(ph_em, (50, (ph - ph_em.height) // 2))
+    phone.alpha_composite(ph_txt, (50 + ph_em.width + 22 - ph_txt.info["pad"], (ph - ph_txt.height) // 2 + 3))
+
+    def cta_phone(img, tl, total):
+        s, a = pop(tl - (T_CTA + 2.7), 0.34)
         if a <= 0:
             return
-        pulse = 1.0 + 0.035 * math.sin((tl - T_CTA - 1.7) * 7.5) if tl > T_CTA + 2.1 else 1.0
-        blit(img, btn, W // 2, 1060, scale=s * pulse, alpha=a)
-        s2, a2 = pop(tl - (T_CTA + 2.2), 0.3)
-        if a2 > 0:
-            blit(img, foot, W // 2, 1250, scale=s2, alpha=a2)
-    ov.append((T_CTA, TOTAL, cta_btn))
+        pulse = 1.0 + 0.03 * math.sin((tl - T_CTA - 2.7) * 7.5) if tl > T_CTA + 3.1 else 1.0
+        blit(img, phone, W // 2, 1262, scale=s * pulse, alpha=a)
+    ov.append((T_CTA, TOTAL, cta_phone))
     return ov
 
 

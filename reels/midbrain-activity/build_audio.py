@@ -10,7 +10,7 @@ Structure
     0.0 - 3.5   hook: boom, sub pulse, tick per word, riser into the drop
     3.5 - 23.0  groove (kick/clap/hat/bass/arp/pad), ding + whoosh on every round
     23.0 - 28.0 "smiles" section: brighter major chords, bells, softer drums
-    28.0 - 33.0 CTA: groove returns, button chime, final stab
+    28.0 - 34.0 CTA: groove returns, contact chime, final stab
 """
 import sys
 import wave
@@ -340,17 +340,18 @@ def build():
     # ---- CTA (28.0 - 33.0) -----------------------------------------------------------
     m.put(m.fx, riser(0.9), T_CTA - 0.9, 0.5, send=0.2)
     m.put(m.fx, impact(), T_CTA, 1.0, send=0.3)
-    groove_section(m, T_CTA, T_CTA + 4.0, ["Am", "F"], 0.95)
+    groove_section(m, T_CTA, T_CTA + 5.0, ["Am", "F", "C"], 0.95)
     m.put(m.fx, pop_sfx(520), T_CTA + 0.25, 0.3)
     for i in range(6):
         m.put(m.fx, pop_sfx(700 + 60 * i), T_CTA + 0.55 + 0.16 * i, 0.26)
-    # button + footer
-    m.put(m.fx, pop_sfx(1000), T_CTA + 1.7, 0.4)
-    m.put(m.fx, bell(midi(A4, 15)), T_CTA + 1.7, 0.42, 0.0, send=0.45)
-    m.put(m.fx, bell(midi(A4, 22)), T_CTA + 1.8, 0.32, 0.2, send=0.45)
-    m.put(m.fx, pop_sfx(800), T_CTA + 2.2, 0.25)
+    # school block pops, then the contact pill + chime
+    for i, (dt, hz) in enumerate(((1.5, 560), (1.62, 620), (1.75, 680), (1.87, 740), (2.1, 800), (2.22, 900), (2.5, 640))):
+        m.put(m.fx, pop_sfx(hz), T_CTA + dt, 0.26)
+    m.put(m.fx, pop_sfx(1000), T_CTA + 2.7, 0.4)
+    m.put(m.fx, bell(midi(A4, 15)), T_CTA + 2.7, 0.42, 0.0, send=0.45)
+    m.put(m.fx, bell(midi(A4, 22)), T_CTA + 2.8, 0.32, 0.2, send=0.45)
     # final stab + ring-out
-    ft = T_CTA + 4.0
+    ft = T_CTA + 5.0
     m.put(m.fx, impact(), ft, 0.8, send=0.35)
     m.put(m.music, pad([midi(A4, s) for s in (0, 3, 7)], 1.0), ft, 0.45, send=0.4)
     m.put(m.music, bass_note(midi(A4, -24), 0.9), ft, 0.7)

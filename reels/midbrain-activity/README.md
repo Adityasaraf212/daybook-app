@@ -1,6 +1,7 @@
 # Mid-Brain Activity: promo reel
 
-`midbrain-activity-reel.mp4`: 33 s, 1080x1920 (9:16), 30 fps, H.264 + AAC, about -14 LUFS.
+`midbrain-activity-reel.mp4`: 34 s, 1080x1920 (9:16), 30 fps, H.264 + AAC, about -14 LUFS.
+`midbrain-activity-reel-share.mp4`: same cut, smaller file (about 17 MB) for WhatsApp / upload-limited channels.
 `cover.png`: suggested cover / thumbnail (hook frame with the question on screen).
 
 Re-cut from the already-edited 130 s clip (`VID-20261010-WA0023.mp4`). The old voiceover,
@@ -16,7 +17,7 @@ are gone: the caption band is cropped off and everything on screen is new.
 | 6.5-11.5 | Step 1: cotton pads, then the blindfold | Shows the eyes are fully covered |
 | 11.5-23.0 | Rounds 1-4: colors, shapes, pictures, words + numbers (progress tracker at top) | Escalating difficulty keeps people watching; each round asks the viewer a question |
 | 23.0-28.0 | `THE SMILES SAY IT ALL` | Emotional payoff |
-| 28.0-33.0 | CTA: `WANT YOUR CHILD TO TRY THIS?` + `DM US "MIDBRAIN"` | Edit this to your real handle / contact |
+| 28.0-34.0 | End card: `WANT YOUR CHILD TO TRY THIS?`, The Maple International School, Bhadra, `CONTACT NOW 8440076300` | School name, place and phone number are in the `COPY` dict (`cta_school`, `cta_place`, `cta_phone`) |
 
 The bottom ~17% of the frame is a deliberate dark fade, which is where Instagram / Shorts overlay
 their caption and buttons.
